@@ -1,0 +1,454 @@
+[
+    {
+        "id": "f0b3e4f1b7a1c001",
+        "type": "tab",
+        "label": "OEE",
+        "disabled": false,
+        "info": "OEE-Berechnung aus MQTT-Topics: planbelegungszeit, stillstandszeit, istmenge, ausschuss, ideal_cycle_time_s"
+    },
+    {
+        "id": "in_pbz",
+        "type": "mqtt in",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "Planbelegungszeit",
+        "topic": "Planbelegungszeit",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 130,
+        "y": 340,
+        "wires": [
+            [
+                "054f91a7200e8153"
+            ]
+        ]
+    },
+    {
+        "id": "in_still",
+        "type": "mqtt in",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "Stillstandszeit",
+        "topic": "Stillstandszeit",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "054f91a7200e8153"
+            ]
+        ]
+    },
+    {
+        "id": "in_ausschuss",
+        "type": "mqtt in",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "Ausschuss",
+        "topic": "Ausschuss",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 180,
+        "wires": [
+            [
+                "054f91a7200e8153"
+            ]
+        ]
+    },
+    {
+        "id": "in_ist",
+        "type": "mqtt in",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "Istmenge",
+        "topic": "Istmenge",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 260,
+        "wires": [
+            [
+                "054f91a7200e8153"
+            ]
+        ]
+    },
+    {
+        "id": "g_verf",
+        "type": "ui_gauge",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "Verfügbarkeit",
+        "group": "grp_main",
+        "order": 2,
+        "width": 7,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Verfügbarkeitsfaktor",
+        "label": "%",
+        "format": "{{msg.payload.verfugbarkeitsfaktorinprozent | number:2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#82c83c"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 890,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "g_leist",
+        "type": "ui_gauge",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "Leistung",
+        "group": "grp_main",
+        "order": 3,
+        "width": 7,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Leistungsfaktor",
+        "label": "%",
+        "format": "{{msg.payload.leistungsfakorinprozent | number:2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#82c83c"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 880,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "g_oee",
+        "type": "ui_gauge",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "OEE",
+        "group": "grp_main",
+        "order": 1,
+        "width": 21,
+        "height": 5,
+        "gtype": "gage",
+        "title": "Gesamtanlageneffektivität (OEE)",
+        "label": "%",
+        "format": "{{msg.payload.oeeinprozent | number:2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#82c83c"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 870,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "054f91a7200e8153",
+        "type": "join",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "join",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "useparts": false,
+        "accumulate": true,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 390,
+        "y": 220,
+        "wires": [
+            [
+                "09b28d89616094ee"
+            ]
+        ]
+    },
+    {
+        "id": "09b28d89616094ee",
+        "type": "function",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "function - OEE Berechnung",
+        "func": "//beispiel\n//msg.payload.aussenmittel = (msg.payload.aussen1 + msg.payload.aussen2)/2;\n//msg.payload.differenz = msg.payload.innen - msg.payload.aussenmittel;\n//beispiel ende\n\nmsg.payload.betriebszeit = msg.payload.Planbelegungszeit - msg.payload.Stillstandszeit;\nmsg.payload.gutmenge = msg.payload.Istmenge - msg.payload.Ausschuss;\n\n//tideal ist die Zeit für ein Werkstück beim perfekten Durchlauf\nconst t_ideal = 5;\nmsg.payload.stuckzahlsoll = msg.payload.betriebszeit / t_ideal;\n\nmsg.payload.verfugbarkeitsfaktor = msg.payload.betriebszeit / msg.payload.Planbelegungszeit;\nmsg.payload.leistungsfakor = msg.payload.Istmenge / msg.payload.stuckzahlsoll;\nmsg.payload.qualitatsfaktor = msg.payload.gutmenge / msg.payload.Istmenge;\nmsg.payload.oee = (msg.payload.verfugbarkeitsfaktor * msg.payload.leistungsfakor * msg.payload.qualitatsfaktor);\n\nmsg.payload.verfugbarkeitsfaktorinprozent = msg.payload.verfugbarkeitsfaktor * 100;\nmsg.payload.leistungsfakorinprozent = msg.payload.leistungsfakor * 100;\nmsg.payload.qualitatsfaktorinprozent = msg.payload.qualitatsfaktor * 100;\nmsg.payload.oeeinprozent = msg.payload.oee * 100;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 220,
+        "wires": [
+            [
+                "g_oee",
+                "g_verf",
+                "g_leist",
+                "5c84840292b8e778",
+                "4a4e2c30075d8be2",
+                "9d0a7cbd07a1ed78",
+                "62722aaa01459ca1",
+                "df77d75f6446b20e"
+            ]
+        ]
+    },
+    {
+        "id": "5c84840292b8e778",
+        "type": "debug",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "fb866ad4e4ad2da4",
+        "type": "ui_text",
+        "z": "f0b3e4f1b7a1c001",
+        "group": "grp_main",
+        "order": 5,
+        "width": 7,
+        "height": 4,
+        "name": "",
+        "label": "Produktionsdaten",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1050,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "4a4e2c30075d8be2",
+        "type": "function",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "function - Prod. Daten",
+        "func": "const soll      = Math.round(msg.payload.stuckzahlsoll) || 0;\nconst ist       = msg.payload.Istmenge || 0;\nconst gut       = msg.payload.gutmenge || 0;\nconst aus       = msg.payload.Ausschuss || 0;\n\nmsg.payload =\n    `Sollstückzahl: ${soll}<br>` +\n    `Iststückzahl: ${ist}<br>` +\n    `Gutmenge: ${gut}<br>` +\n    `Ausschuss: ${aus}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 420,
+        "wires": [
+            [
+                "fb866ad4e4ad2da4"
+            ]
+        ]
+    },
+    {
+        "id": "9d0a7cbd07a1ed78",
+        "type": "ui_gauge",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "",
+        "group": "grp_main",
+        "order": 4,
+        "width": 7,
+        "height": 3,
+        "gtype": "gage",
+        "title": "Qualitätsfaktor",
+        "label": "%",
+        "format": "{{msg.payload.qualitatsfaktorinprozent | number:2}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#b30000",
+            "#e6e600",
+            "#82c83c"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 900,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "81ed20cc7eca8797",
+        "type": "ui_text",
+        "z": "f0b3e4f1b7a1c001",
+        "group": "grp_main",
+        "order": 6,
+        "width": 7,
+        "height": 4,
+        "name": "",
+        "label": "Faktoren",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1020,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "62722aaa01459ca1",
+        "type": "function",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "function - Faktoren",
+        "func": "const vfaktor = (msg.payload.verfugbarkeitsfaktor || 0).toFixed(2);\nconst lfaktor = (msg.payload.leistungsfakor || 0).toFixed(2);\nconst qfaktor = (msg.payload.qualitatsfaktor || 0).toFixed(2);\n\nmsg.payload =\n    `Verfügbarkeitsfaktor: ${vfaktor}<br>` +\n    `Leistungsfaktor: ${lfaktor}<br>` +\n    `Qualitätsfaktor: ${qfaktor}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 480,
+        "wires": [
+            [
+                "81ed20cc7eca8797"
+            ]
+        ]
+    },
+    {
+        "id": "df77d75f6446b20e",
+        "type": "function",
+        "z": "f0b3e4f1b7a1c001",
+        "name": "function - Zeiten",
+        "func": "const pzeit = msg.payload.Planbelegungszeit || 0;\nconst szeit = msg.payload.Stillstandszeit || 0;\nconst bzeit = msg.payload.betriebszeit || 0;\n\nmsg.payload =\n    `Planbelegungszeit: ${pzeit}<br>` +\n    `Stillstandszeit: ${szeit}<br>` +\n    `Betriebszeit: ${bzeit}`;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 540,
+        "wires": [
+            [
+                "8109a0483df578e4"
+            ]
+        ]
+    },
+    {
+        "id": "8109a0483df578e4",
+        "type": "ui_text",
+        "z": "f0b3e4f1b7a1c001",
+        "group": "grp_main",
+        "order": 7,
+        "width": 7,
+        "height": 4,
+        "name": "",
+        "label": "Zeiten",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 1010,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "BZTG-Broker",
+        "broker": "10.x.x.x",
+        "port": "1883",
+        "clientid": "node-red-oee",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "grp_main",
+        "type": "ui_group",
+        "name": "",
+        "tab": "grp_tab",
+        "order": 1,
+        "disp": true,
+        "width": 21,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "grp_tab",
+        "type": "ui_tab",
+        "name": "OEE",
+        "icon": "dashboard",
+        "order": 1
+    },
+    {
+        "id": "e45862dbd1203e24",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6"
+        }
+    }
+]
